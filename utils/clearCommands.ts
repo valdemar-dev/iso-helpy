@@ -12,7 +12,7 @@ try {
     console.log('Started refreshing application (/) commands.');
 
     rest.put(
-        Routes.applicationCommands(process.env.BOT_DISCORD_ID ?? ""), 
+        Routes.applicationGuildCommands(process.env.BOT_DISCORD_ID ?? "", ""), 
         { body: [] }
     ).then(() => {
         console.log(`Tried to clear commands. Environment: ${process.env.ENVIRONMENT}`);

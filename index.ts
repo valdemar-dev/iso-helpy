@@ -112,7 +112,7 @@ client.on("messageCreate", async (message) => {
             listener.execute(message);
         })
     } catch {
-        console.log("failed to execute message listener");
+        message.channel.send("Something went wrong.");
     }
 })
 

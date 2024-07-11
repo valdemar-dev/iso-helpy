@@ -47,9 +47,7 @@ const execute = async (message: Message) => {
         });
 
         return;
-    }
-
-    if ((userInDb as any).isConfessionBanned) {
+    } else if (userInDb && (userInDb as any).isConfessionBanned) {
         const embed = makeEmbed("Failed to confess.", "You naughty thing! You've been confession banned. You can no longer send confessions.", []);
         
         await message.reply({
