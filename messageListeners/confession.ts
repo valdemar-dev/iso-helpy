@@ -45,8 +45,6 @@ const execute = async (message: Message) => {
             verificationImage: "",
             isConfessionBanned: false,
         });
-
-        return;
     } else if (userInDb && (userInDb as any).isConfessionBanned) {
         const embed = makeEmbed("Failed to confess.", "You naughty thing! You've been confession banned. You can no longer send confessions.", []);
         
