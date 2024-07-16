@@ -34,7 +34,7 @@ const execute = async (interaction: CommandInteraction) => {
 
     const filter = (message: Message) => message.attachments.size > 0;
 
-    const collector = channel.createMessageCollector({ filter, time: 3_600_000 });
+    const collector = channel.createMessageCollector({ filter, time: 3_600_000, max: 1, });
 
     collector.on('collect', async (message) => {
         const fields = [
@@ -67,7 +67,7 @@ const execute = async (interaction: CommandInteraction) => {
     });
 
     collector.on('end', async (collected) => {
-        if (collected.size < 1) await channel.delete();
+        if (collected.size < 1) await channel.delete().catch();
     });
 
     return;
@@ -79,8 +79,10 @@ const command: Command = {
     data: {
         name: "photoverification",
         description: "Make sure you have your photos ready!",
-        defaultMemberPermissions: []
+        defaultMemberPermissions: [],
+        options: [],
     },
+
 
     execute: execute,
 };
