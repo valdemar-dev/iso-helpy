@@ -92,7 +92,7 @@ const execute = async (message: Message) => {
             const fields = [
                 {
                     name: "Link",
-                    value: `${(userInDb as unknown as any).verificationImage}`
+                    value: `${(userInDb as unknown as any).verificationImage ?? "No link"}`
                 },
             ];
 
