@@ -89,16 +89,24 @@ const execute = async (message: Message) => {
         });
 
         if (userInDb) {
-            const fields = [
-                {
-                    name: "Link",
-                    value: `${(userInDb as unknown as any).verificationImage ?? "No link"}`
-                },
-            ];
+            try {
+                const fields = [
+                    {
+                        name: "Link",
+                        value: `${(userInDb as any)?.verificationImage ?? "No link"}`
+                    },
+                ];
 
-            const embed = makeEmbed("Verification Proof", "This user has been verified as **Not a Catfish!**\nIf you're staff, you can cross reference their verification image via the link below.", fields);
+                const embed = makeEmbed(
+                    "Verification Proof", 
+                    "This user has been verified as **Not a Catfish!**\nIf you're staff, you can cross reference their verification image via the link below.", 
+                    fields,
+                );
 
-            thread.send({ embeds: [embed] });
+                thread.send({ embeds: [embed] });
+            } catch(e) {
+                console.log(userInDb);
+            }        
         }
     } else {
         const fieldsTwo = [
