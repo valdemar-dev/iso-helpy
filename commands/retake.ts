@@ -1,10 +1,12 @@
 
-import { ChannelType, CommandInteraction, EmbedField, GuildTextBasedChannel, GuildTextChannelType, makeError, Message, PermissionFlagsBits, User } from "discord.js";
+import { ApplicationCommandOptionType, ChannelType, CommandInteraction, EmbedField, GuildTextBasedChannel, GuildTextChannelType, makeError, Message, PermissionFlagsBits, User } from "discord.js";
 import roles from "../utils/roles";
 import makeEmbed from "../utils/makeEmbed";
 import channels from "../utils/channels";
 
 const execute = async (interaction: CommandInteraction) => {
+    const reason = interaction.options.get("reason", true).value;
+
     const channel = interaction.channel as GuildTextBasedChannel;
 
     if (!channel) return;
@@ -57,12 +59,21 @@ const execute = async (interaction: CommandInteraction) => {
         },
     ];
 
-    const badProofEmbed = makeEmbed("Invalid Proof!", `The Photo Verification proof you gave is not sufficient.`, badProofEmbedFields);
+    const badProofEmbed = makeEmbed(
+        "Ticket Info", 
+        "Information regarding your ticket.",
+        badProofEmbedFields,
+        user?.displayAvatarURL({ size: 128, })
+    );
 
-    await channel.send({ embeds: [badProofEmbed], });
+    const invalidContent = `## Invalid Proof
+        \nYou've been asked to retake your Photo Verification proof, because the image or video you gave didn't meet the criteria.
+        \nReason: \`${reason}\``; 
+
+    await channel.send({ content: `<@${user?.id}>\n${invalidContent}`, });
+
     await user?.send({ 
-        content: 
-            "## Hey, something urgent needs your attention!\nYour Photo Verification ticket is pending, because the proof you gave was not sufficient.", 
+        content: invalidContent, 
         embeds: [
             badProofEmbed
         ], 
@@ -113,7 +124,52 @@ const command: Command = {
         name: "retake",
         description: "Ask someone to retake their photo verification.",
         defaultMemberPermissions: [],
-        options: [],
+        options: [
+            {
+                name: "reason",
+                description: "Why you are asking this person to retake proof.",
+                type: ApplicationCommandOptionType.String,
+                required: true,
+                choices: [
+                    {
+                        name: "Does not clearly show face",
+                        value: "The photo or video does not clearly show the users face."
+                    },
+                    {
+                        name: "Using a filter",
+                        value: "The user is using a filter in the photo or video.",
+                    },
+                    {
+                        name: "Illegible Speech or Text",
+                        value: "The speech or text of the user is illegible.",
+                    },
+                    {
+                        name: "Incorrect or Missing Date",
+                        value: "The user has not written the current date in (DD/MM/YYYY) on paper.",
+                    },
+                    {
+                        name: "Does Not State Server Name",
+                        value: "The user does not state the name of the server in speech or on paper.",
+                    },
+                    {
+                        name: "Did Not State Username",
+                        value: "The user does not state their unique Discord Username in speech or on paper.",
+                    },
+                    {
+                        name: "Did Not Follow Any Instructions",
+                        value: "Did Not Follow Any Instructions.",
+                    },
+                    {
+                        name: "Bot Crash",
+                        value: "The bot crashed, so you need to resend the same photo or video.",
+                    },
+                    {
+                        name: "Other / NA",
+                        value: "Other / NA",
+                    },
+                ]
+            }
+        ],
     },
 
     execute: execute,
