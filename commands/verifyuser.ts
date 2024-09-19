@@ -1,5 +1,4 @@
-
-import { Attachment, AttachmentBuilder, ChannelType, CommandInteraction, PermissionFlagsBits, User } from "discord.js";
+import { Attachment, AttachmentBuilder, ChannelType, CommandInteraction, makeError, PermissionFlagsBits, User } from "discord.js";
 import roles from "../utils/roles";
 import makeEmbed from "../utils/makeEmbed";
 import channels from "../utils/channels";
@@ -55,7 +54,18 @@ const execute = async (interaction: CommandInteraction) => {
             files: [`${pending?.url}`],  
         });
 
-        await interaction.editReply(`<@!${userId}> has been photo verified!`)
+        await interaction.editReply(`Photo verified ${userId}. They will automatically be contacted.`)
+
+        const approvalEmbed = makeEmbed(
+            "You've been photo verified!", 
+            `Your Photo verification for https://discord.gg/isolationism has been accepted.\n 
+            You can now post messages in the <#${channels.verifiedSelfies}> channel!\n 
+            Please do not send selfies in the <#${channels.unverifiedSelfies}> channel anymore.`, 
+            []
+        );
+
+        await user.send({ embeds: [approvalEmbed], }).catch();
+        await interaction.channel.send({ embeds: [approvalEmbed], }).catch();
 
         const userInDb = await Users.findOne({
             where: {
@@ -81,15 +91,15 @@ const execute = async (interaction: CommandInteraction) => {
             verificationImage: `${message.url}`,
             isConfessionBanned: false,
         });
+
+        setTimeout(async () => {
+            await interaction.channel?.delete().catch();
+        }, 10000);
     } catch (e: any) {
         const embed = makeEmbed("Failed to give role.", `${e.message}`, []);
 
         await interaction.editReply({ embeds: [embed], });
-
-        return;
     }
-
-    return;
 };
 
 const command: Command = {

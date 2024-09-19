@@ -93,7 +93,7 @@ client.on("interactionCreate", async (interaction) => {
         if (interaction.isRepliable()) {
             const embed = makeEmbed("Something went wrong.", `${e}`, []);
 
-            interaction.editReply({
+            interaction.reply({
                 embeds: [embed],
             }).catch((e) => {
                 interaction.editReply({

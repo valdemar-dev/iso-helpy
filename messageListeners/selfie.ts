@@ -1,4 +1,4 @@
-import { CommandInteraction, Message, PermissionFlagsBits } from "discord.js";
+import { CommandInteraction, GuildTextBasedChannel, InteractionWebhook, Message, PermissionFlagsBits } from "discord.js";
 import roles from "../utils/roles";
 import channels from "../utils/channels";
 import { Users } from "../utils/dbObjects";
@@ -16,8 +16,6 @@ const execute = async (message: Message) => {
 
     if (attachmentSize < 1) {
         message.delete();
-
-        message.author.send(`Please only post *selfies* in the selfie channels!`);
     }
 
     const actions = [
@@ -51,8 +49,7 @@ const execute = async (message: Message) => {
             hasActionCommensed = true;
 
             action.emojis.forEach(async (e) => {
-                await message.react(e);
-            })
+                await message.react(e); })
         }
     }
 
@@ -79,7 +76,25 @@ const execute = async (message: Message) => {
     const thread = await message.startThread({
         name: "Comments",
         reason: "Selfies need comments!",
+    }).catch(async (error) => {
+        const errorEmbed = makeEmbed(
+            "Failed to create thread.",
+            `Failed to create thread for ${message.url}`,
+            [],
+        );
+
+        const errorTextEmbed = makeEmbed(
+            "Full Error",
+            `${error}`,
+            [],
+        );
+
+        const errorChannel = await message.guild!.channels.fetch(channels.errors) as GuildTextBasedChannel;
+
+        errorChannel?.send({ embeds: [errorEmbed, errorTextEmbed, ]});
     });
+
+    if (!thread) return;
 
     if (channel === channels.verifiedSelfies) {
         const userInDb = await Users.findOne({
@@ -109,21 +124,29 @@ const execute = async (message: Message) => {
             }        
         }
     } else {
-        const fieldsTwo = [
+        const fieldsOne = [
             {
                 name: "Link",
                 value: `<#${channels.verificationInstructions}>`,
             },
         ];
 
-        const embedOne = makeEmbed("Catfish Warning!", `This post has **NOT** been Photo Verified! Please be weary of [Catfishes!](https://en.wikipedia.org/wiki/Catfishing)\n\nIs this post suspicious? <@&${roles.staff}> and they'll investigate further.`, []);
+        const embedTwo = makeEmbed(
+            "Be wary of catfishes!", 
+            `
+                This user hasn't verified themselves, which means they COULD be a catfish.
+                If this post is suspicious, please <@&${roles.staff}> and they'll investigate further.
+                This is an automated message, and is sent for every user who has not verified themselves.
+            `, []);
 
-        const embedTwo = makeEmbed("Are you the poster?", `You can Photo Verify yourself below! :heart:`, fieldsTwo)
+        const embedOne = makeEmbed(
+            "Hey! It looks like you're verified!", 
+            `Prove you're not a catfish, and to gain access to the <#${channels.verifiedSelfies}> channel, photo verify yourself below! It takes just 5 minutes. :heart:`, 
+            fieldsOne, 
+        )
 
         thread.send({ embeds: [embedOne, embedTwo] });
     }
-
-    return;
 };
 
 const messageListener: MessageListener = {

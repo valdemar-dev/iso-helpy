@@ -44,7 +44,7 @@ const execute = async (interaction: CommandInteraction) => {
             },
             {
                 name: "Invalid Proof",
-                value: "Ask to retake photo / video || `/closeticket`",
+                value: "`/retake`",
             },
         ];
 
@@ -54,8 +54,13 @@ const execute = async (interaction: CommandInteraction) => {
             ...defaultChannelPermissions,
             {
                 id: roles.staff,
-                allow: [PermissionFlagsBits.ViewChannel],
+                allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.UseApplicationCommands],
             },
+            {
+                id: interaction.user.id,
+                deny: [PermissionFlagsBits.SendMessages],
+                allow: [PermissionFlagsBits.ViewChannel],
+            }
         ]);
 
         await message.reply({ 

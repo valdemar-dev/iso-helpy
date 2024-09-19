@@ -21,7 +21,7 @@ export default (sequelize: Sequelize,) => {
 		authorId: {
 			type: DataTypes.STRING,
 			allowNull: true,
-		},
+		}, 
 	}, {
 		timestamps: false,
 	});

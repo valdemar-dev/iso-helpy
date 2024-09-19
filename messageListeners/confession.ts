@@ -7,13 +7,13 @@ import makeEmbed from "../utils/makeEmbed";
 const execute = async (message: Message) => {
     if (message.guild) return;
 
-    if (!message.content.startsWith("confess: ")) {
-        message.reply("Confess with `confess: YOUR MESSAGE`");
+    if (message.content.startsWith("confess: ")) {
+        message.reply("You no longer need to type confess: at the start of your message to confess. Just type any messsage, and it'll be turned into a confession.");
 
         return;
     }
 
-    const cleanContent = message.cleanContent.slice(9,256);
+    const cleanContent = message.cleanContent;
 
     const confessionChannel = await message.client.channels.fetch(channels.confessions);
 

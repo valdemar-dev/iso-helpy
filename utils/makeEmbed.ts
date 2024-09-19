@@ -7,7 +7,8 @@ export default function makeEmbed(
     fields: Array<{
         name: string,
         value: string,
-    }>
+    }>,
+    thumbnail?: string,
 ) {
     const embed = new EmbedBuilder();
 
@@ -19,7 +20,7 @@ export default function makeEmbed(
         text: "Fueled by Caffeine",
     });
 
-    embed.setThumbnail(`${client.user?.displayAvatarURL({ size: 128, })}`) 
+    embed.setThumbnail(`${thumbnail || client.user?.displayAvatarURL({ size: 128, })}`) 
     embed.setTimestamp();
 
     return embed;
