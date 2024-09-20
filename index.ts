@@ -1,4 +1,4 @@
-import { Attachment, Client, Collection, GuildMemberRoleManager, IntentsBitField, Partials, PermissionsBitField } from "discord.js";
+import { Attachment, Client, Collection, GuildMemberRoleManager, IntentsBitField, Message, PartialMessage, Partials, PermissionsBitField } from "discord.js";
 import fs from "node:fs";
 import makeEmbed from "./utils/makeEmbed";
 import { Sequelize } from "sequelize";
@@ -29,6 +29,7 @@ const client = new Client({
 const commandList = new Collection<string, Command>();
 const messageListenerList = new Collection<string, MessageListener>();
 const pendingVerificationImages = new Collection<string, Attachment>();
+const snipeChannels = new Collection<string, Message<boolean> | PartialMessage>();
 
 const commands = fs.readdirSync("./commands");
 
@@ -114,9 +115,16 @@ client.on("messageCreate", async (message) => {
     } catch {
         message.channel.send("Something went wrong.");
     }
-})
+});
+
+client.on("messageDelete", async (message) => {
+    if (message?.author?.bot) return;
+
+    snipeChannels.set(message.channel.id, message);
+});
 
 client.login(process.env.BOT_TOKEN ?? "");
 
 globalThis.client = client;
 globalThis.pendingVerificationImages  = pendingVerificationImages;
+globalThis.snipeChannels = snipeChannels;

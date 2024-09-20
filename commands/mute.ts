@@ -15,8 +15,10 @@ const choices = [
 ];
 
 const execute = async (interaction: CommandInteraction) => {
-    const target = interaction.options.get("target")?.member as GuildMember;
-    const duration = interaction.options.get("duration");
+    const target = interaction.options.get("target", true)?.member as GuildMember;
+    const duration = interaction.options.get("duration", true);
+    const reason = interaction.options.get("reason", true);
+    const extraInfo = interaction.options.get("extrainfo");
 
     if (!target || !duration) {
         const embed = makeEmbed("Failed to mute.", "No target or duration provided.", []);
@@ -40,6 +42,10 @@ const execute = async (interaction: CommandInteraction) => {
         {
             name: "Duration",
             value: `${choices.find(c => c.value === duration.value)?.name}`,
+        },
+        {
+            name: "Reason",
+            value: `${reason.value} ${extraInfo?.value ?? ""}`,
         },
     ];
 
@@ -78,7 +84,41 @@ const command: Command = {
                 description: "Person to mute",
                 required: true,
                 name: "target",
-            }
+            },
+            {
+                type: ApplicationCommandOptionType.String,
+                description: "Reason for the mute",
+                name: "reason",
+                required: true,
+                choices: [
+                    {
+                        name: "Breaking Rules",
+                        value: "Breaking Server Rules",
+                    },
+                    {
+                        name: "Suspicious Account",
+                        value: "Account Deemed Suspicious",
+                    },
+                    {
+                        name: "Schizo Maxxing",
+                        value: "Engaging with schizophrenic hallucinations.",
+                    }, 
+                    {
+                        name: "Rage Baiting",
+                        value: "Performing rage baiting.",
+                    },
+                    {
+                        name: "Other (specify)",
+                        value: "Other -",
+                    }, 
+                ],
+            },
+            {
+                type: ApplicationCommandOptionType.String,
+                description: "Extra info (required for reason, other)",
+                name: "extrainfo",
+                required: false,
+            },
         ],
     },
 

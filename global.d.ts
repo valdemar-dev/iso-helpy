@@ -1,4 +1,4 @@
-import { Attachment, Client, Collection, CommandInteraction, Message, PermissionFlagsBits, SlashCommandBooleanOption, SlashCommandNumberOption, SlashCommandOptionsOnlyBuilder, SlashCommandRoleOption, SlashCommandStringOption, SlashCommandUserOption } from "discord.js"
+import { Attachment, Client, Collection, CommandInteraction, Message, PartialMessage, PermissionFlagsBits, SlashCommandBooleanOption, SlashCommandNumberOption, SlashCommandOptionsOnlyBuilder, SlashCommandRoleOption, SlashCommandStringOption, SlashCommandUserOption } from "discord.js"
 
 declare global {
     type Command = {
@@ -36,7 +36,8 @@ declare global {
     }
 
     var client: Client;
-    var pendingVerificationImages: Collection<string, Attachment>,
+    var pendingVerificationImages: Collection<string, Attachment>;
+    var snipeChannels: Collection<string, Message<boolean> | PartialMessage>;
 }
 
 declare module globalThis {
