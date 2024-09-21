@@ -9,6 +9,7 @@ export default function makeEmbed(
         value: string,
     }>,
     thumbnail?: string,
+    imageURL?: string,
 ) {
     const embed = new EmbedBuilder();
 
@@ -22,6 +23,7 @@ export default function makeEmbed(
 
     embed.setThumbnail(`${thumbnail || client.user?.displayAvatarURL({ size: 128, })}`) 
     embed.setTimestamp();
+    embed.setImage(imageURL ?? null);
 
     return embed;
 }

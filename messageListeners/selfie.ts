@@ -140,8 +140,8 @@ const execute = async (message: Message) => {
             `, []);
 
         const embedOne = makeEmbed(
-            "Hey! It looks like you're verified!", 
-            `Prove you're not a catfish, and to gain access to the <#${channels.verifiedSelfies}> channel, photo verify yourself below! It takes just 5 minutes. :heart:`, 
+            "Hey! It looks like you're not verified!", 
+            `If you'd like to prove you're not a catfish, and want gain access to the <#${channels.verifiedSelfies}> channel, please photo verify yourself below! **It takes just 5 minutes.** :heart:`, 
             fieldsOne, 
         )
 
