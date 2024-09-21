@@ -12,6 +12,7 @@ const channels = process.env.ENVIRONMENT === "development"
     errors: "1260907216219799625",
     announcements: "1260907216219799625",
     support: "1287074717613821983",
+    generalVoice: "1287148542573678592",
 } : {
     ticketCategory: "1158488340505579641",
     verifiedImages: "1161743772619649024",
@@ -22,6 +23,7 @@ const channels = process.env.ENVIRONMENT === "development"
     errors: "1286296777078603848",
     announcements: "1155115322102267924",
     support: "1287063227792101396",
+    generalVoice: "1154844208755134485",
 } 
 
 export default channels;

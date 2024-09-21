@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js";
+import { Attachment, EmbedBuilder } from "discord.js";
 
 
 export default function makeEmbed(

@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ChannelType, CommandInteraction, PermissionFlagsBits } from "discord.js";
+import { Application, ApplicationCommandOptionType, ChannelType, CommandInteraction, PermissionFlagsBits } from "discord.js";
 import roles from "../utils/roles";
 import channels from "../utils/channels";
 import makeEmbed from "../utils/makeEmbed";
@@ -26,6 +26,7 @@ const execute = async (interaction: CommandInteraction) => {
     const title = interaction.options.get("title", true);
     const message = interaction.options.get("message", true);
     const doPingEveryone = interaction.options.get("pingeveryone", true); 
+    const image = interaction.options.get("image", false)?.attachment;
 
     const embed = makeEmbed(
         title.value as string,
@@ -41,6 +42,12 @@ const execute = async (interaction: CommandInteraction) => {
     });
 
     if (!announcement) return;
+
+    if (image) {
+        await announcement.reply({
+            files: image && [image],
+        });
+    }
 
     await announcement.react("👍").catch(() => {
         interaction.followUp("Failed to react with thumbsup emoji to announcement.")
@@ -78,6 +85,12 @@ const command: Command = {
                 description: "Ping @everyone or the common role?",
                 type: ApplicationCommandOptionType.Boolean,
                 required: true,
+            },
+            {
+                name: "image",
+                description: "An image to attach",
+                type: ApplicationCommandOptionType.String,
+                required: false,
             },
         ],
     },
