@@ -40,7 +40,6 @@ const command: Command = {
         name: "vcping",
         description: "Ping the VC ping",
         defaultMemberPermissions: [
-            PermissionFlagsBits.Administrator
         ],
         options: [
             {
