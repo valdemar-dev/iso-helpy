@@ -35,9 +35,9 @@ const execute = async (interaction: CommandInteraction) => {
         }).catch(() => { return; });
 
 
-        // await target.ban({
-         //   reason: reason,
-        // });
+        await target.ban({
+           reason: reason,
+        });
     } catch(error) {
         const errorEmbed = makeEmbed(
             "Failed to ban target.",
