@@ -62,7 +62,7 @@ const execute = async (message: Message) => {
     });
 
     await Confessions.create({
-        messageId: sentMessage.id,
+        messageLink: sentMessage.url,
         authorId: message.author.id,
     });
 

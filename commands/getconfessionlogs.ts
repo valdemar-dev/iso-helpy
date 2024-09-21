@@ -7,11 +7,11 @@ import channels from "../utils/channels";
 const execute = async (interaction: CommandInteraction) => {
     await interaction.editReply("Beginning spying..");
 
-    const messageId = interaction.options.get("confessionmessageid", true);
+    const messageLink = interaction.options.get("messagelink", true);
 
     const confession = await Confessions.findOne({
         where: {
-            messageId: messageId.value,
+            messageLink: messageLink.value,
         }
     });
 
@@ -50,8 +50,8 @@ const execute = async (interaction: CommandInteraction) => {
         }
 
         currentConfessionBatch.push({
-            name: `Confession #${i}`,
-            value: `https://discord.com/channels/${interaction.guild!.id}/${channels.confessions}/${confession.dataValues.messageId}`,
+            name: `Confession #${i + 1}`,
+            value: `${confession.dataValues.messageLink}`,
             inline: false,
         })
     }
@@ -152,8 +152,8 @@ const command: Command = {
         ],
         options: [
             {
-                name: "confessionmessageid",
-                description: "The ID of the confession you'd like to spy on.",
+                name: "messagelink",
+                description: "The link of the confession you'd like to spy on.",
                 type: ApplicationCommandOptionType.String,
                 required: true,
             },

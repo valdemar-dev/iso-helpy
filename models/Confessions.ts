@@ -2,7 +2,7 @@ import { DataTypes, InferAttributes, Sequelize, InferCreationAttributes, ModelDe
 
 // You can also define modules in a functional way
 interface NoteAttributes {
-  messageId: string;
+  messageLink: string;
   authorId: string;
 }
 
@@ -14,7 +14,7 @@ export default (sequelize: Sequelize,) => {
         NoteAttributes,
         NoteCreationAttributes
     > = sequelize.define('confessions', {
-		messageId: {
+		messageLink: {
 			type: DataTypes.STRING,
 			primaryKey: true,
 		},

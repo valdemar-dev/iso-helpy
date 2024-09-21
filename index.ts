@@ -91,6 +91,8 @@ client.on("interactionCreate", async (interaction) => {
             await command.execute(interaction);
         }
     } catch(e) {
+        console.log(e);
+
         if (interaction.isRepliable()) {
             const embed = makeEmbed("Something went wrong.", `${e}`, []);
 

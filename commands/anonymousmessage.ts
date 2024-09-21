@@ -41,7 +41,9 @@ const execute = async (interaction: CommandInteraction) => {
         "Anonymous Says", 
         `${message}`, 
         [],
-        `https://cdn.discordapp.com/embed/avatars/${Math.floor(Math.random() * 6)}.png`
+        `https://cdn.discordapp.com/embed/avatars/${Math.floor(Math.random() * 6)}.png`,
+        null,
+        "Sent via: /anonymousmessage"
     );
 
     const sentMessage = await interaction.channel?.send({
@@ -53,7 +55,7 @@ const execute = async (interaction: CommandInteraction) => {
     }
 
     await Confessions.create({
-        messageId: sentMessage.id,
+        messageLink: sentMessage.url,
         authorId: interaction.user.id,
     });
 

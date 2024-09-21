@@ -8,8 +8,9 @@ export default function makeEmbed(
         name: string,
         value: string,
     }>,
-    thumbnail?: string,
-    imageURL?: string,
+    thumbnail?: string | null,
+    imageURL?: string | null,
+    footer?: string,
 ) {
     const embed = new EmbedBuilder();
 
@@ -18,7 +19,7 @@ export default function makeEmbed(
     embed.setFields(fields);
     embed.setColor(8454071)
     embed.setFooter({
-        text: "Fueled by Caffeine",
+        text: footer ? footer : "Fueled by Caffeine",
     });
 
     embed.setThumbnail(`${thumbnail || client.user?.displayAvatarURL({ size: 128, })}`) 
