@@ -148,11 +148,11 @@ const command: Command = {
                         value: "The user has not written the current date in (DD/MM/YYYY) on paper.",
                     },
                     {
-                        name: "Does Not State Server Name",
+                        name: "Incorrect or Missing Server Name",
                         value: "The user does not state the name of the server in speech or on paper.",
                     },
                     {
-                        name: "Did Not State Username",
+                        name: "INcorrect or Missing Username",
                         value: "The user does not state their unique Discord Username in speech or on paper.",
                     },
                     {

@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, CommandInteraction, PermissionFlagsBits } from "discord.js";
+import { ApplicationCommandOptionType, channelMention, CommandInteraction, PermissionFlagsBits, userMention } from "discord.js";
 import roles from "../utils/roles";
 import makeEmbed from "../utils/makeEmbed";
 
@@ -15,34 +15,15 @@ const execute = async (interaction: CommandInteraction) => {
         return;
     }
 
-    const snipeEmbed = makeEmbed(
-        "Sniped!",
-        `<@!${snipe.author?.id}>'s deleted message was sniped!`,
-        [
-            {
-                name: "Originally Sent At",
-                value: `${snipe.createdAt.toLocaleTimeString()}`
-            },
-            {
-                name: "Thread (if any)",
-                value: `<#${snipe.thread?.id}>`
-            },
-        ],
-        snipe.author?.displayAvatarURL({ size: 128, }),
-    );
-
     const attachments = snipe.attachments;
 
     const mappedAttachments = attachments.map((attachment) => attachment);
 
     await interaction.followUp({
-        content: snipe.cleanContent ?? undefined,
-        embeds: [snipeEmbed],
+        content: `${userMention(snipe.author!.id)} was sniped! They said: "${snipe.content ?? undefined}"`,
         files: [...mappedAttachments],
         ephemeral: doEphemeralReply as boolean,
     });
-
-
 
     return;
 };
