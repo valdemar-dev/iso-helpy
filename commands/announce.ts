@@ -9,7 +9,17 @@ const execute = async (interaction: CommandInteraction) => {
     const announcementChannel = await interaction.guild!.channels.fetch(channels.announcements);
 
     if (!announcementChannel || announcementChannel.type !== ChannelType.GuildText) {
-        await interaction.editReply("The announcement channel was not found, or is not a text channel.");
+        const failEmbed = makeEmbed(
+            "Could not send Announcement",
+            `${JSON.stringify(announcementChannel)}`,
+            [],
+        );
+
+        await interaction.editReply({
+            content: "The announcement channel was not found.",
+            embeds: [failEmbed],
+        });
+
         return;
     }
 
