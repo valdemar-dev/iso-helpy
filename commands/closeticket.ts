@@ -15,11 +15,17 @@ const execute = async (interaction: CommandInteraction) => {
     const name = split[0];
     const userId = split[1];
 
-    if (name !== "verification") {
+    const supportChannelNames = [
+        "verification",
+        "audit",
+        "support",
+    ];
+
+    if (!supportChannelNames.includes(name)) {
         const fields = [
             {
                 name: "Valid",
-                value: "#verification-2350234890234",
+                value: "#[support / audit / verification]-2350234890234",
             },
             {
                 name: "Invalid",
@@ -27,7 +33,7 @@ const execute = async (interaction: CommandInteraction) => {
             },
         ];
 
-        const embed = makeEmbed("Not a verification channel.", "Command must be used in a verification ticket.", fields);
+        const embed = makeEmbed("Not a support channel.", "Command must be used in a support ticket.", fields);
 
         await interaction.editReply({ embeds: [embed], })
 

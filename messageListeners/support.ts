@@ -1,7 +1,8 @@
-import { ChannelType, Message, PermissionFlagsBits, userMention, } from "discord.js";
+import { AllowedMentionsTypes, ChannelType, Message, PermissionFlagsBits, userMention, } from "discord.js";
 import channels from "../utils/channels";
 import { Confessions, Users } from "../utils/dbObjects";
 import makeEmbed from "../utils/makeEmbed";
+import roles from "../utils/roles";
 
 const execute = async (message: Message) => {
     if (!message.guild) return;
@@ -13,6 +14,10 @@ const execute = async (message: Message) => {
             id: message.guild.roles.everyone,
             allow: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.AttachFiles], 
             deny: [PermissionFlagsBits.ViewChannel]
+        },
+        {
+            id: roles.staff,
+            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.UseApplicationCommands],
         },
         {
             id: message.author.id,
