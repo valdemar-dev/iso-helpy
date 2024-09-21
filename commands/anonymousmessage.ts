@@ -62,7 +62,6 @@ const execute = async (interaction: CommandInteraction) => {
 
 const command: Command = {
     requiredRoles: [
-        roles.staff,
     ],
 
     data: {
