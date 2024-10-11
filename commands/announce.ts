@@ -1,4 +1,4 @@
-import { Application, ApplicationCommandOptionType, ChannelType, CommandInteraction, PermissionFlagsBits } from "discord.js";
+import { ApplicationCommandOptionType, ChannelType, CommandInteraction, PermissionFlagsBits } from "discord.js";
 import roles from "../utils/roles";
 import channels from "../utils/channels";
 import makeEmbed from "../utils/makeEmbed";

@@ -6,7 +6,7 @@ import { Users } from "../utils/dbObjects";
 
 const execute = async (interaction: CommandInteraction) => {
     if (interaction.channel?.type !== ChannelType.GuildText) {
-        await interaction.editReply("Must be used in a guild.");
+        interaction.editReply("Must be used in a guild.");
 
         return;
     }
@@ -30,15 +30,17 @@ const execute = async (interaction: CommandInteraction) => {
 
         const embed = makeEmbed("Not a verification channel.", "Command must be used in a verification ticket.", fields);
 
-        await interaction.editReply({ embeds: [embed], })
+        interaction.editReply({ embeds: [embed], })
 
         return;
     }
 
+    interaction.editReply("Verifying user..")
+
     try {
         const user = await interaction.guild!.members.fetch(userId);
 
-        await user.roles.add(roles.verified);
+        user.roles.add(roles.verified);
 
         const verifiedImagesChannel = await interaction.guild!.channels.fetch(channels.verifiedImages);
 
@@ -49,13 +51,6 @@ const execute = async (interaction: CommandInteraction) => {
 
         if (!pending) throw new Error("User has not sent photo verification."); 
 
-        const message = await verifiedImagesChannel.send({
-            content: `<@!${userId}> | ${userId}`,
-            files: [`${pending?.url}`],  
-        });
-
-        await interaction.editReply(`Photo verified ${userId}. They will automatically be contacted.`)
-
         const approvalEmbed = makeEmbed(
             "You've been photo verified!", 
             `Your Photo verification for https://discord.gg/isolationism has been accepted.\n 
@@ -64,8 +59,13 @@ const execute = async (interaction: CommandInteraction) => {
             []
         );
 
-        await user.send({ embeds: [approvalEmbed], }).catch();
-        await interaction.channel.send({ embeds: [approvalEmbed], }).catch();
+        user.send({ embeds: [approvalEmbed], }).catch();
+        interaction.channel.send({ embeds: [approvalEmbed], }).catch();
+
+        const message = await verifiedImagesChannel.send({
+            content: `<@!${userId}> | ${userId}`,
+            files: [`${pending?.url}`],  
+        });
 
         const userInDb = await Users.findOne({
             where: {
@@ -74,7 +74,7 @@ const execute = async (interaction: CommandInteraction) => {
         });
 
         if (userInDb) {
-            await Users.update({
+            Users.update({
                 verificationImage: `${message.url}`,
                 isConfessionBanned: false,
             }, {
@@ -86,7 +86,7 @@ const execute = async (interaction: CommandInteraction) => {
             return
         }
 
-        await Users.create({
+        Users.create({
             id: userId,
             verificationImage: `${message.url}`,
             isConfessionBanned: false,
@@ -98,7 +98,7 @@ const execute = async (interaction: CommandInteraction) => {
     } catch (e: any) {
         const embed = makeEmbed("Failed to give role.", `${e.message}`, []);
 
-        await interaction.editReply({ embeds: [embed], });
+        interaction.editReply({ embeds: [embed], });
     }
 };
 

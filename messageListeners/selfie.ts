@@ -16,6 +16,8 @@ const execute = async (message: Message) => {
 
     if (attachmentSize < 1) {
         message.delete();
+
+        return;
     }
 
     const actions = [

@@ -8,7 +8,10 @@ const execute = async (interaction: CommandInteraction) => {
     const defaultChannelPermissions = [
         {
             id: interaction.guild!.roles.everyone,
-            allow: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.AttachFiles], 
+            allow: [
+                PermissionFlagsBits.SendMessages, 
+                PermissionFlagsBits.AttachFiles
+            ], 
             deny: [PermissionFlagsBits.ViewChannel]
         },
         {

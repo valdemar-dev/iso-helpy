@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType, CommandInteraction, GuildMember, GuildMemberRoleManager, PermissionFlagsBits, User } from "discord.js";
+
 import roles from "../utils/roles";
 import makeEmbed from "../utils/makeEmbed";
 
@@ -12,7 +13,7 @@ const execute = async (interaction: CommandInteraction) => {
     const userRoles = interaction.member!.roles as GuildMemberRoleManager;
     const targetRoles = target.roles;
 
-    if (!target.bannable || (userRoles.highest < targetRoles.highest)) {
+    if (!target.bannable || (userRoles.highest.position < targetRoles.highest.position)) {
         await interaction.followUp({ 
             content: "Either you, or I, do not have the sufficient permissions to ban this person.", 
             ephemeral: true,
