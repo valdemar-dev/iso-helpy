@@ -14,7 +14,7 @@ const channels = process.env.ENVIRONMENT === "development"
     support: "1287074717613821983",
     generalVoice: "1287148542573678592",
 } : {
-    ticketCategory: "1158488340505579641",
+    ticketCategory: "1154844016681169056",
     verifiedImages: "1161743772619649024",
     verifiedSelfies: "1158065122053468250",
     unverifiedSelfies: "1154844082317824052",

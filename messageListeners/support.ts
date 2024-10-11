@@ -29,6 +29,7 @@ const execute = async (message: Message) => {
         name: `support-${message.author.id}`,
         type: ChannelType.GuildText,
         permissionOverwrites: defaultChannelPermissions,
+        parent: channels.ticketCategory,
     });
 
     const supportEmbed = makeEmbed(
