@@ -51,8 +51,8 @@ const execute = async (message: Message) => {
 
 const messageListener: MessageListener = {
     data: {
-        name: "confessions",
-        description: "Listens to confessions.",
+        name: "support",
+        description: "Listens to support messages.",
     },
 
     execute: execute,
