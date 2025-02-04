@@ -8,25 +8,23 @@ const execute = async (interaction: CommandInteraction) => {
 
     const target = interaction.options.get("target", true).member as GuildMember;
     const reason = interaction.options.get("reason", true).value as string;
-    const isAppealable = interaction.options.get("appealable", true).value as boolean;
 
     const userRoles = interaction.member!.roles as GuildMemberRoleManager;
     const targetRoles = target.roles;
 
     if (!target.bannable || (userRoles.highest.position < targetRoles.highest.position)) {
         await interaction.followUp({ 
-            content: "Either you, or I, do not have the sufficient permissions to ban this person.", 
+            content: "Either you, or I, do not have the sufficient permissions to shadow realm this person.", 
             ephemeral: true,
         }); 
-
 
         return;
     }
 
     try {
         const informEmbed = makeEmbed(
-            "You have been banned from Isolationism.",
-            isAppealable ? "You can appeal this ban here:\nhttps://forms.gle/dRmAsH1Kv6B91NdC9" : "Your ban is not appealable",
+            "You've been sent to the shadow realm!",
+            "Shadow realm bans are appealable.",
             [ { name: "Reason", value: reason,}],
             target.displayAvatarURL({ size: 128, }),
         );
@@ -35,13 +33,12 @@ const execute = async (interaction: CommandInteraction) => {
             embeds: [informEmbed],
         }).catch(() => { return; });
 
-
-        await target.ban({
-           reason: reason,
-        });
+        await target.roles.set([
+            roles.shadowBan,
+        ]);
     } catch(error) {
         const errorEmbed = makeEmbed(
-            "Failed to ban target.",
+            "Failed to shadow realm target.",
             `${error}`,
             [],
             target.displayAvatarURL({ size: 128, }),
@@ -60,19 +57,14 @@ const execute = async (interaction: CommandInteraction) => {
             name: "Reason",
             value: reason
         },
-
-        {
-            name: "Is this ban appealable?",
-            value: `${isAppealable}`,
-        },
     ];
 
     const successEmbed = makeEmbed(
-        `The ban hammer has fallen!`,
-        `${target.user.username} was banned.`,
+        `The Jury finds the defendant GUILTY.`,
+        `${target.user.username} was sent into the shadow realm.`,
         successEmbedFields,
         target.displayAvatarURL({ size: 128, }),
-        "https://media1.tenor.com/m/LR_Ok6iBkU0AAAAC/subscribe-to-my-onlyfans.gif"
+        "https://media1.tenor.com/m/QLo29HXhR5cAAAAd/shadow-realm-yu-gi-oh.gif"
     );
 
     await interaction.followUp({
@@ -88,29 +80,33 @@ const command: Command = {
     ],
 
     data: {
-        name: "ban",
-        description: "Ban someone from the server.",
+        name: "shadowrealm",
+        description: "Send someone to the shadow realm.",
         defaultMemberPermissions: [
             PermissionFlagsBits.BanMembers,
         ],
         options: [
             {
                 name: "target",
-                description: "Who to ban",
+                description: "Who to send into the shadow realm",
                 type: ApplicationCommandOptionType.User,
                 required: true,
             },
             {
                 name: "reason",
-                description: "Why they are being banned",
+                description: "Why they are being shadow realmed",
                 type: ApplicationCommandOptionType.String,
                 required: true,
-            },
-            {
-                name: "appealable",
-                description: "Is this ban appealable",
-                type: ApplicationCommandOptionType.Boolean,
-                required: true,
+                choices: [
+                    {
+                        name: "Age",
+                        value: "Too young for Isolationism",
+                    },
+                    {
+                        name: "Sussy or Catfish",
+                        value: "Suspicious Account / Suspected Catfish",
+                    },
+                ]
             },
         ],
     },
